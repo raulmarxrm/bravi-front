@@ -1,19 +1,19 @@
 import React from 'react'
+import { useContext } from 'react'
+import { AuthContext } from '../../contexts/Auth/AuthContext'
 import Corpo from '../login/corpo'
 
 export const Home = () => {
-    let count= 0;
-    function incremente() {
-        count++
-        console.log(count);
+    const {logout} = useContext(AuthContext)
+    const handlerLogout = () =>{
+        logout()
     }
 
 
     return (
         <>
         <h1>home</h1>
-        <Corpo incremente={incremente}/>
-        
+        <Corpo incremente={handlerLogout}/>        
         </>
     )  
 }

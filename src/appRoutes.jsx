@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import React,{ useContext } from "react";
 import { Route, BrowserRouter as Router, Routes, Navigate } from "react-router-dom";
 import { AuthContext, AuthProvider } from "./contexts/Auth/AuthContext";
 import { Home } from "./pages/home";
@@ -6,9 +6,13 @@ import Login from "./pages/login";
 
 const AppRoutes = () => {
     const Private = ({children}) =>{
-        const {authenticated} = useContext(AuthContext);
+        const {authenticated,loading } = useContext(AuthContext);
+        if(loading){
+            return <div className="loading">Carregando...</div>
+        }
+
         if(!authenticated){
-            <Navigate to="/login" />
+            return <Navigate to="/login" />
         }
         return children;
     }
