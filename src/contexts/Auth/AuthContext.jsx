@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api, createSession } from "../../services/api";
+import { api, createContacts, createSession } from "../../services/api";
 
 export const AuthContext = createContext();
 
@@ -40,9 +40,15 @@ export const AuthProvider = ({ children }) => {
         setUser(null)
         navigate("/login");
     };
+
+    const createContact = async (name,celular,whatsapp,email) => {
+        const res = await createContacts(name,celular,whatsapp,email);                
+    };
+
+
     return (
         <AuthContext.Provider
-            value={{ authenticated: !!user, user, loading, login, logout }}
+            value={{ authenticated: !!user, user, loading, login, logout,createContact }}
         >
             {children}
         </AuthContext.Provider>
