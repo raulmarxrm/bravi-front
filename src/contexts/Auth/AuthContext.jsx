@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createSession } from "../../services/api";
+import { api, createSession } from "../../services/api";
 
 export const AuthContext = createContext();
 
@@ -9,19 +9,24 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true)
 
-    useEffect(()=>{
+    useEffect(() => {
         const recoverUser = localStorage.getItem('user')
-        if(recoverUser){
+        const token = localStorage.getItem('token')
+        if (recoverUser && token) {
             setUser(JSON.parse(recoverUser))
+            api.defaults.headers.Authorization = `Bearer ${token}`;
         }
         setLoading(false)
-    },[])
+    }, [])
 
-    const login = async(email, password) => {
-        const res = await createSession(email,password);
+    const login = async (email, password) => {
+        const res = await createSession(email, password);
         console.log("first", res.data);
         const logger = res.data.user;
+        const token = res.data.token;
         localStorage.setItem("user", JSON.stringify(logger))
+        localStorage.setItem("token", token)
+        api.defaults.headers.Authorization = `Bearer ${token}`;
 
         setUser(logger)
         navigate("/");
@@ -29,13 +34,15 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         console.log("lougot");
-        localStorage.removeItem("user")
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        api.defaults.headers.Authorization = null;
         setUser(null)
         navigate("/login");
     };
     return (
         <AuthContext.Provider
-            value={{ authenticated: !!user, user,loading, login, logout }}
+            value={{ authenticated: !!user, user, loading, login, logout }}
         >
             {children}
         </AuthContext.Provider>
