@@ -33,3 +33,9 @@ export const updateContact = async (id,name,celular,whatsapp,email) => {
     axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
     return api.put(`/api/contacts/${id}`,{name,celular,whatsapp,email})
 }
+
+export const createUser = async (data) => {
+    axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+    console.log(data.name,data.email,data.password);
+    return api.post(`/api/register`,data)
+}

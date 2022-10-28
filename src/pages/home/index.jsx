@@ -62,18 +62,19 @@ export const Home = () => {
     }
     useEffect(() => {
         (async () => {
-            const res = await getUsers();
+            const res = await getUsers()
             setUser(res.data);
             setLoading(false);
         })();
     }, [atualizar]);
 
-    const handlerLogout = () => {
+    const handlerLogout = (e) => {
         logout();
     };
 
     const handleDelete = (id) => {
-        const res = deletaContacts(id);
+        const res = deletaContacts(id)
+        console.log(res);
         refresh();
     };
 

@@ -1,3 +1,4 @@
+import { Alert } from "@mui/material";
 import React, { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api, createContacts, createSession, updateContact } from "../../services/api";
@@ -40,14 +41,12 @@ export const AuthProvider = ({ children }) => {
     };
 
     const createContact = async (name,celular,whatsapp,email) => {
-        const res = await createContacts(name,celular,whatsapp,email);                
+        await createContacts(name,celular,whatsapp,email);                
     };
 
     const updateContacts = async (id,name,celular,whatsapp,email) => {
-        const recoverUser = localStorage.getItem('user')
-        let user_id = JSON.parse(recoverUser).id
-        const res = await updateContact(id,name,celular,whatsapp,email)
-                     
+        await updateContact(id,name,celular,whatsapp,email)
+                             
     };
 
 

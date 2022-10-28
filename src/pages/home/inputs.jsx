@@ -10,8 +10,6 @@ import { useEffect } from "react";
 
 const FormPropsTextFields = (props) => {
     const { createContact, updateContacts } = useContext(AuthContext);
-    const [users, setUser] = useState({});
-    const [loading, setLoading] = useState(true);
 
     const [name, setName] = useState("");
     const [celular, setCel] = useState("");
@@ -31,21 +29,22 @@ const FormPropsTextFields = (props) => {
                 })
 
         }
-        update();
+        if(user){
+            update();
+        }
     }, [user])
 
     const handleCadContacts = (e) => {
         e.preventDefault();
-
-        createContact(name, celular, whatsapp, email)
-
+        createContact(name, celular, whatsapp, email).then((responseJson)=> console.log(responseJson))   
+        //await createContact().then((responseJson) => {alert("Cadastro realizaddo com sucesso")}).catch(alert("Campos nao podem ser vazio"))
+        
         props.refresh();
     };
-    const handleUpdate = async e => {
+    const handleUpdate = async (e) => {
         e.preventDefault();
-
-        updateContacts(user, name, celular, whatsapp, email);
-
+        console.log(e);
+        await updateContacts(user, name, celular, whatsapp, email).then(alert("Atualização realizada com sucesso"));
         props.refresh();
     };
     return (
@@ -134,7 +133,7 @@ const FormPropsTextFields = (props) => {
                         onChange={(e) => setWhats(e.target.value)}
                     />
                     <TextField
-                        id="outlined-celular-input"
+                        id="outlined-email-input"
                         label="email"
                         type="email"
                         autoComplete="current-email"

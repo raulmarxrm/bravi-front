@@ -3,6 +3,7 @@ import { Route, BrowserRouter as Router, Routes, Navigate } from "react-router-d
 import { AuthContext, AuthProvider } from "./contexts/Auth/AuthContext";
 import { Home } from "./pages/home";
 import Login from "./pages/login";
+import Register from "./pages/register/register";
 
 const AppRoutes = () => {
     const Private = ({children}) =>{
@@ -12,7 +13,7 @@ const AppRoutes = () => {
         }
 
         if(!authenticated){
-            return <Navigate to="/login" />
+            return <Navigate to="/" />
         }
         return children;
     }
@@ -20,7 +21,8 @@ const AppRoutes = () => {
         <Router>
             <AuthProvider>
                 <Routes>
-                    <Route path="/login" element={<Login />} />
+                    <Route path="login" element={<Login />} />
+                    <Route path="register" element={<Register />} />
                     <Route path="/" element={<Private><Home /></Private>} />
                 </Routes>
             </AuthProvider>
