@@ -14,6 +14,8 @@ import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
 
 import { Backdrop, Box, Button, Container, Fade, Modal } from "@mui/material";
 import TransitionsModal from "./modal";
@@ -25,10 +27,12 @@ const style = {
     transform: "translate(-50%, -50%)",
     width: 400,
     bgcolor: "background.paper",
-    boxShadow: 24, 
+    boxShadow: 24,
     p: 4,
 };
 var idUser;
+var edit = false;
+var visibility = false;
 
 export const Home = () => {
     const [secondary] = useState(false);
@@ -38,8 +42,17 @@ export const Home = () => {
     const [loading, setLoading] = useState(true);
     const [atualizar, setAtualizar] = useState(true);
     const [open, setOpen] = useState(false);
-    const handleOpen = (id) => {
+    const handleOpen = (id,flag) => {
         idUser = id;
+        if(flag === 'visible'){
+            visibility = true
+            edit=false
+        }
+        if(flag === 'edit'){
+            visibility = false
+            edit = true
+        }
+
         setOpen(true)
     };
     const handleClose = () => setOpen(false);
@@ -89,16 +102,27 @@ export const Home = () => {
                                 secondaryAction={
                                     <>
                                         <IconButton
+                                            edge="end"
                                             value={user.id}
-                                            // onChange={(e) =>setId(e.target.value)}
+                                            aria-label="delete"
+                                            onClick={() =>
+                                                handleOpen(user.id,'visible')
+                                                
+                                            }
+                                            type="submit"
+                                        >
+                                            <VisibilityIcon color="action" />
+                                        </IconButton>
+                                        <IconButton
+                                            value={user.id}
                                             edge="end"
                                             aria-label="delete"
-                                            onClick={()=>{
-                                                handleOpen(user.id)
+                                            onClick={() => {
+                                                handleOpen(user.id,'edit')
                                             }}
                                             type="submit"
                                         >
-                                            <EditIcon />
+                                            <EditIcon color="primary" />
                                         </IconButton>
                                         <IconButton
                                             edge="end"
@@ -107,7 +131,7 @@ export const Home = () => {
                                                 handleDelete(user.id)
                                             }
                                         >
-                                            <DeleteIcon />
+                                            <DeleteIcon color="error" />
                                         </IconButton>
                                     </>
                                 }
@@ -145,7 +169,7 @@ export const Home = () => {
                 >
                     <Fade in={open}>
                         <Box sx={style}>
-                            <FormPropsTextFields refresh={refresh} user={idUser}/>
+                            <FormPropsTextFields refresh={refresh} user={idUser} edit={edit} visibility={visibility} />
                         </Box>
                     </Fade>
                 </Modal>

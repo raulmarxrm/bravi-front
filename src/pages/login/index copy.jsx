@@ -9,7 +9,6 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("first", { email, password });
         login(email, password)
     };
     return (

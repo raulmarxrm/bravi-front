@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api, createContacts, createSession } from "../../services/api";
+import { api, createContacts, createSession, updateContact } from "../../services/api";
 
 export const AuthContext = createContext();
 
@@ -21,7 +21,6 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         const res = await createSession(email, password);
-        console.log("first", res.data);
         const logger = res.data.user;
         const token = res.data.token;
         localStorage.setItem("user", JSON.stringify(logger))
@@ -33,7 +32,6 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
-        console.log("lougot");
         localStorage.removeItem("user");
         localStorage.removeItem("token");
         api.defaults.headers.Authorization = null;
@@ -45,10 +43,17 @@ export const AuthProvider = ({ children }) => {
         const res = await createContacts(name,celular,whatsapp,email);                
     };
 
+    const updateContacts = async (id,name,celular,whatsapp,email) => {
+        const recoverUser = localStorage.getItem('user')
+        let user_id = JSON.parse(recoverUser).id
+        const res = await updateContact(id,name,celular,whatsapp,email)
+                     
+    };
+
 
     return (
         <AuthContext.Provider
-            value={{ authenticated: !!user, user, loading, login, logout,createContact }}
+            value={{ authenticated: !!user, user, loading, login, logout,createContact,updateContacts }}
         >
             {children}
         </AuthContext.Provider>
